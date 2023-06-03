@@ -40,7 +40,6 @@ const App: React.FC = () => {
   const [textBoxes, setTextBoxes] = useState<TextBox[]>([]);
   const [selectedTextBoxId, setSelectedTextBoxId] = useState<string | null>(null);
 
-
   const handleDrag = (e: any, ui: any, id: string) => {
     const { x, y } = ui;
     setTextBoxes(prevTextBoxes =>
@@ -52,21 +51,23 @@ const App: React.FC = () => {
 
   const addTextBox = () => {
     const id = uuid();
-    setTextBoxes(prevTextBoxes => [...prevTextBoxes, { id, x: 0, y: 0, text: 'テキストを入力します', fontSize: 20, color: '#000000' }]);
+    setTextBoxes(prevTextBoxes => [...prevTextBoxes, { id, x: 0, y: 0, text: '', fontSize: 20, color: '#000000' }]);
   };
 
   const removeTextBox = (id: string) => {
     setTextBoxes(prevTextBoxes => prevTextBoxes.filter(tb => tb.id !== id));
   };
 
-  const downloadImage = async () => {
+  const downloadCard = async () => {
     if (!cardRef.current) return;
-    const canvas = await html2canvas(cardRef.current as HTMLElement);
-    const imgData = canvas.toDataURL();
-    const link = document.createElement('a');
-    link.href = imgData;
-    link.download = 'card.png';
-    link.click();
+
+    const canvas = await html2canvas(cardRef.current);
+    const dataUrl = canvas.toDataURL();
+
+    const a = document.createElement("a");
+    a.href = dataUrl;
+    a.download = "card.png";
+    a.click();
   };
 
   return (
@@ -85,7 +86,7 @@ const App: React.FC = () => {
         ))}
       </select>
       <button onClick={addTextBox}>Add Text Box</button>
-      <button onClick={downloadImage}>Download Card</button>
+      <button onClick={downloadCard}>Download Card</button>
       <div>
         <input
           type="number"
@@ -123,30 +124,18 @@ const App: React.FC = () => {
               style={textBoxStyle}
               onClick={() => setSelectedTextBoxId(textBox.id)}
             >
-              <Draggable
-                key={textBox.id}
-                defaultPosition={{ x: textBox.x, y: textBox.y }}
-                onStop={(e, ui) => handleDrag(e, ui, textBox.id)}
-              >
-                <div
-                  className="draggable-textbox"
-                  style={textBoxStyle}
-                  onClick={() => setSelectedTextBoxId(textBox.id)}
-                >
-                  <button className="remove-btn" style={{ ...removeButtonStyle, right: 'unset', left: 0 }} onClick={() => removeTextBox(textBox.id)}>X</button>
-                  <textarea
-                    value={textBox.text}
-                    style={{ background: 'transparent', border: 'none', fontSize: `${textBox.fontSize}px`, color: textBox.color }}
-                    onChange={e =>
-                      setTextBoxes(prevTextBoxes =>
-                        prevTextBoxes.map(tb =>
-                          tb.id === textBox.id ? { ...tb, text: e.target.value } : tb
-                        )
-                      )
-                    }
-                  />
-                </div>
-              </Draggable>
+              <button style={{ ...removeButtonStyle, ...textBoxHoverStyle, right: 'unset', left: 0 }} onClick={() => removeTextBox(textBox.id)}>X</button>
+              <textarea
+                value={textBox.text}
+                style={{ background: 'transparent', border: 'none', fontSize: `${textBox.fontSize}px`, color: textBox.color }}
+                onChange={e =>
+                  setTextBoxes(prevTextBoxes =>
+                    prevTextBoxes.map(tb =>
+                      tb.id === textBox.id ? { ...tb, text: e.target.value } : tb
+                    )
+                  )
+                }
+              />
             </div>
           </Draggable>
         ))}

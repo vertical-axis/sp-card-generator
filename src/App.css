@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+.draggable-textbox .remove-btn {
+  display: none;
+}
+
+.draggable-textbox:hover .remove-btn {
+  display: block;
+}
