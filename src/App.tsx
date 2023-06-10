@@ -18,14 +18,8 @@ const textBoxStyle = {
 
 const removeButtonStyle = {
   position: "absolute" as "absolute",
-  top: 0,
-  right: 0,
-  opacity: 0,
-  transition: "opacity 0.3s",
-};
-
-const textBoxHoverStyle = {
-  opacity: 1,
+  top: -20,
+  left: -20,
 };
 
 const backgroundImageOptions = [
@@ -133,7 +127,7 @@ const App: React.FC = () => {
                   style={textBoxStyle}
                   onClick={() => setSelectedTextBoxId(textBox.id)}
                 >
-                  <button className="remove-btn" style={{ ...removeButtonStyle, right: 'unset', left: 0 }} onClick={() => removeTextBox(textBox.id)}>X</button>
+                  <button className="remove-btn" style={{ ...removeButtonStyle}} onClick={() => removeTextBox(textBox.id)}>X</button>
                   <textarea
                     value={textBox.text}
                     style={{ background: 'transparent', border: 'none', fontSize: `${textBox.fontSize}px`, color: textBox.color }}

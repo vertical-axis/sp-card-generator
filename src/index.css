@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.draggable-textbox .remove-btn {
+  display: none;
+}
+
+.draggable-textbox:hover .remove-btn {
+  display: block;
+}
